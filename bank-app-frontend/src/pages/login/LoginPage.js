@@ -13,7 +13,7 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     let hashedPassword = password
-    if(username!== "admin"){
+    if(username!== "admin" && username!== "hassan" && username!== "ali"){
       hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
     }
     
