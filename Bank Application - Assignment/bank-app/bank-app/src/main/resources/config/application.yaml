@@ -1,0 +1,21 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank
+    username: hassan
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+
+api:
+  security:
+    ignored: /swagger-ui/**,/h2-console,/h2-console/**,/v3/api-docs,/v2/api-docs,/api/v1/auth/**,/api/v1/auth/login
+
+jwt:
+  secret: UGEzLf3ug6HdJy7nEaVZjIxraYsbNIbt4AIBpgTAgTQ=
+  expiration: 3600000

@@ -1,0 +1,104 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: hassan
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: roles
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1.1
+      author: hassan
+      changes:
+        - insert:
+            tableName: users
+            columns:
+#              - column:
+#                  name: id
+#                  value: '123'
+              - column:
+                  name:  username
+                  value: 'admin'
+              - column:
+                  name:  password
+                  value: $2a$12$8Adk4PKlMzMN01Y1.xGewu7gOtV6PZvISO4MFq83YgVmP1dpgeoYq
+              - column:
+                  name:  email
+                  value: 'admin@gmail.com'
+              - column:
+                  name:  roles
+                  value: 'ADMIN'
+              - column:
+                  name:  address
+                  value: 'Lahore'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: 'hassan'
+              - column:
+                  name: password
+                  value: $2a$12$aOmUkXPrg3ZgsAyHVwa0feTvYkGojV.1F9n924LjQxEwnykifsUNy
+              - column:
+                  name: email
+                  value: 'hassan@gmail.com'
+              - column:
+                  name: roles
+                  value: 'ACCOUNTHOLDER'
+              - column:
+                  name: address
+                  value: 'Kasur'
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: 'ali'
+              - column:
+                  name: password
+                  value: $2a$12$rKTPgOkCedSDZKTJCxIdqezxs/GM.GUQW7W0MWMGqR91U2Gyn4162
+              - column:
+                  name: email
+                  value: 'ali@gmail.com'
+              - column:
+                  name: roles
+                  value: 'ACCOUNTHOLDER'
+              - column:
+                  name: address
+                  value: 'Lahore'
