@@ -24,11 +24,11 @@ const ViewAccountInfo = () => {
           return;
         }
 
-        const accountResponse = await axiosInstance.get(`/accounts/users/${userId}`);
+        const accountResponse = await axiosInstance.get(`/users/${userId}/accounts`);
         if (accountResponse.data) {
           setAccountInfo(accountResponse.data);
           const accountId = accountResponse.data.id;
-          const balanceResponse = await axiosInstance.get(`/balances/accounts/${accountId}`);
+          const balanceResponse = await axiosInstance.get(`/accounts/${accountId}/balances`);
           setBalanceInfo(balanceResponse.data);
         } else {
           setError("Account not found for the current user.");

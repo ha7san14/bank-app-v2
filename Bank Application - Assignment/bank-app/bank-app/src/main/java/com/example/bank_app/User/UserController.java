@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v2/users")
+@RequestMapping("/api/v2")
 public class UserController {
 
     private final UserService userService;
@@ -31,13 +31,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         if (user != null) {
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         LOGGER.info("Password in controller is " + user.getPassword());
         User createdUser = userService.saveUser(user);
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         User updatedUser = userService.updateUser(user, id);
         if (updatedUser != null) {
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('ACCOUNTHOLDER')")
-    @PutMapping("/{id}/password")
+    @PutMapping("/users/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable Long id,
                                                  @RequestParam String oldPassword,
                                                  @RequestParam String newPassword) {

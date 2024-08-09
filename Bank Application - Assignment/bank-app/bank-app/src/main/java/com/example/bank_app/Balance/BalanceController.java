@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v2/balances")
+@RequestMapping("/api/v2")
 public class BalanceController {
 
     private final BalanceService balanceService;
@@ -26,13 +26,13 @@ public class BalanceController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/balances")
     public ResponseEntity<List<Balance>> getAllBalances() {
         List<Balance> balances = balanceService.getAllBalances();
         return ResponseEntity.ok(balances);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/balances/{id}")
     public ResponseEntity<Balance> getBalanceById(@PathVariable Long id) {
         Balance balance = balanceService.getBalanceById(id);
         if (balance != null) {
@@ -42,7 +42,7 @@ public class BalanceController {
         }
     }
 
-    @GetMapping("/accounts/{accountId}")
+    @GetMapping("/accounts/{accountId}/balances")
     public ResponseEntity<Balance> getBalanceByAccountId(@PathVariable Long accountId) {
         Balance balance = balanceService.getBalanceByAccountId(accountId);
         if (balance != null) {
@@ -57,7 +57,7 @@ public class BalanceController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(createdBalance);
 //    }
 
-    @PutMapping("/{id}")
+    @PutMapping("/balances/{id}")
     public ResponseEntity<Balance> updateBalance(@PathVariable Long id, @RequestBody Balance balance) {
         Balance existingBalance = balanceService.getBalanceById(id);
         if (existingBalance != null) {
@@ -69,7 +69,7 @@ public class BalanceController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/balances/{id}")
     public ResponseEntity<Void> deleteBalance(@PathVariable Long id) {
         Balance existingBalance = balanceService.getBalanceById(id);
         if (existingBalance != null) {

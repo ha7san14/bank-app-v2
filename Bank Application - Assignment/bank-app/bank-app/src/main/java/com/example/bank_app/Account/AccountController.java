@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v2/accounts")
+@RequestMapping("/api/v2")
 public class AccountController {
 
     private final AccountService accountService;
@@ -24,13 +24,13 @@ public class AccountController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/accounts")
     public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
         Account account = accountService.getAccountById(id);
         if (account != null) {
@@ -40,7 +40,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/users/{userId}/accounts")
     public ResponseEntity<Account> getAccountByUserId(@PathVariable Long userId) {
         Account account = accountService.getAccountByUserId(userId);
         if (account != null) {
@@ -51,7 +51,7 @@ public class AccountController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/accounts/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         Account existingAccount = accountService.getAccountById(id);
         if (existingAccount != null) {

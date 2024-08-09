@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v2/transactions")
+@RequestMapping("/api/v2")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -32,14 +32,14 @@ public class TransactionController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         List<Transaction> transactions = transactionService.getAllTransactions();
         return ResponseEntity.ok(transactions);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping("/{id}")
+    @GetMapping("/transactions/{id}")
     public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) {
         Transaction transaction = transactionService.getTransactionById(id);
         if (transaction != null) {
@@ -49,12 +49,12 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/accounts/{accountId}")
+    @GetMapping("/accounts/{accountId}/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactionsByAccountId(@PathVariable Long accountId) {
         List<Transaction> transactions = transactionService.getAllTransactionsByAccountId(accountId);
         return ResponseEntity.ok(transactions);
     }
-    @PostMapping
+    @PostMapping("/transactions")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
         try {
             Transaction createdTransaction = transactionService.saveTransaction(transaction);
@@ -72,7 +72,7 @@ public class TransactionController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/transactions/{id}")
     public ResponseEntity<?> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
         Transaction existingTransaction = transactionService.getTransactionById(id);
         if (existingTransaction != null) {
