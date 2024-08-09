@@ -25,7 +25,7 @@ const ManageBalance = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axiosInstance.get("/accounts/get-all-accounts");
+      const response = await axiosInstance.get("/accounts");
       setAccounts(response.data);
 
       // Map for accountId and accountNumber

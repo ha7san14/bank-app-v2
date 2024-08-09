@@ -27,7 +27,7 @@ const ViewTransactionHistory = () => {
         }
 
         const accountResponse = await axiosInstance.get(
-          `/accounts/user/${userId}`
+          `/accounts/users/${userId}`
         );
         if (!accountResponse.data) {
           setError("Account not found for the current user.");
@@ -38,7 +38,7 @@ const ViewTransactionHistory = () => {
         const accountId = accountResponse.data.id;
 
         const transactionsResponse = await axiosInstance.get(
-          `/transactions/account/${accountId}`
+          `/transactions/accounts/${accountId}`
         );
 
         const sortedTransactions = transactionsResponse.data.sort(

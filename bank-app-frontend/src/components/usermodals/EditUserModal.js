@@ -5,7 +5,7 @@ import axiosInstance from "../../api/axiosConfig";
 Modal.setAppElement("#root");
 
 const EditUserModal = ({ isOpen, onRequestClose, user, onUserUpdated }) => {
-  const [updatedUser, setUpdatedUser] = useState(user);
+  const [updatedUser, setUpdatedUser] = useState(() => user || {});
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const EditUserModal = ({ isOpen, onRequestClose, user, onUserUpdated }) => {
     }
 
     try {
-      const response = await axiosInstance.get("/users/get-all-users");
+      const response = await axiosInstance.get("/users");
       const users = response.data;
 
       if (name === "email") {

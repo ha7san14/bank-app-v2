@@ -9,6 +9,8 @@ import com.example.bank_app.exceptionhandling.InsufficientBalanceException;
 import com.example.bank_app.exceptionhandling.InvalidTransactionAmountException;
 import com.example.bank_app.exceptionhandling.InvalidTransactionIndicatorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -35,6 +37,11 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
+//    public List<Transaction> getAllTransactionsV2(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return transactionRepository.findAll(pageable).getContent();
+//    }
+
     public Transaction getTransactionById(Long id) {
         return transactionRepository.findById(id).orElse(null);
     }
@@ -42,6 +49,16 @@ public class TransactionService {
     public List<Transaction> getAllTransactionsByAccountId(Long accountId) {
         return transactionRepository.findByAccountId(accountId);
     }
+
+//    public List<Transaction> getAllTransactionsByAccountIdV2(Long accountId, int page, int size) {
+//        List<Transaction> allTransactions = transactionRepository.findByAccountId(accountId);
+//
+//        Pageable pageable = PageRequest.of(page, size);
+//        int start = Math.min((int) pageable.getOffset(), allTransactions.size());
+//        int end = Math.min((start + pageable.getPageSize()), allTransactions.size());
+//
+//        return allTransactions.subList(start, end);
+//    }
 
     public Transaction saveTransaction(Transaction transaction) throws Exception {
         if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) {

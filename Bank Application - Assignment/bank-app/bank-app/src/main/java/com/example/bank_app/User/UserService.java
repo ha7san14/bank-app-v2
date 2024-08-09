@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,12 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+//    public List<User> getAllUsersV2(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return userRepository.findAll(pageable).getContent();
+//    }
+
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -128,4 +136,3 @@ public class UserService {
         return UUID.randomUUID().toString().replaceAll("-", "").substring(0, ACCOUNT_NUMBER_LENGTH);
     }
 }
-//CHECK

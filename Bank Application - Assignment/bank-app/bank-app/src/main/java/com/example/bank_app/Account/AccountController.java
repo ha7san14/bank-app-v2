@@ -6,13 +6,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api/v2/accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -21,8 +22,9 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = Objects.requireNonNull(accountService, "AccountService must not be null");
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @GetMapping("/get-all-accounts")
+    @GetMapping
     public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
@@ -37,7 +39,8 @@ public class AccountController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/user/{userId}")
+
+    @GetMapping("/users/{userId}")
     public ResponseEntity<Account> getAccountByUserId(@PathVariable Long userId) {
         Account account = accountService.getAccountByUserId(userId);
         if (account != null) {

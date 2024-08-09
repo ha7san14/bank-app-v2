@@ -1,5 +1,7 @@
 package com.example.bank_app.Balance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,12 @@ public class BalanceService {
     public List<Balance> getAllBalances() {
         return balanceRepository.findAll();
     }
+
+//    public List<Balance> getAllBalancesV2(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return balanceRepository.findAll(pageable).getContent();
+//    }
+
 
     public Balance getBalanceById(Long id) {
         return balanceRepository.findById(id).orElse(null);

@@ -23,7 +23,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axiosInstance.get("/users/get-all-users");
+      const response = await axiosInstance.get("/users");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -32,7 +32,7 @@ const ManageUsers = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axiosInstance.get("/accounts/get-all-accounts");
+      const response = await axiosInstance.get("/accounts");
       setAccounts(response.data);
 
       const userAccountIdMap = response.data.reduce((acc, account) => {
@@ -62,7 +62,7 @@ const ManageUsers = () => {
 
   const handleCreateUser = async (user) => {
     try {
-      const response = await axiosInstance.post("/users/create-user", user);
+      const response = await axiosInstance.post("/users", user);
       setUsers([...users, response.data]);
       fetchUsers();
       await fetchAccounts();

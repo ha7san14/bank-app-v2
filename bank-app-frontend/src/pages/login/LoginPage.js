@@ -19,7 +19,7 @@ const LoginPage = () => {
     
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
+        "http://localhost:8080/api/v2/auth/login",
         {
           username,
           password: hashedPassword,

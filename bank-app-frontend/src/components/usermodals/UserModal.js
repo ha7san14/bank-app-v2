@@ -90,7 +90,7 @@ const UserModal = ({ isOpen, onRequestClose, onUserCreated }) => {
 
   const checkUserExistence = async (name, value) => {
     try {
-      const response = await axiosInstance.get("/users/get-all-users");
+      const response = await axiosInstance.get("/users");
       const users = response.data;
 
       if (name === "email") {
@@ -144,7 +144,7 @@ const UserModal = ({ isOpen, onRequestClose, onUserCreated }) => {
     if (Object.keys(validationErrors).length === 0) {
       
       try {
-        const response = await axiosInstance.get("/users/get-all-users");
+        const response = await axiosInstance.get("/users");
         const users = response.data;
 
         const usernameExists = users.some((user) => user.username === username);
@@ -161,7 +161,7 @@ const UserModal = ({ isOpen, onRequestClose, onUserCreated }) => {
           const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
           try {
             const response = await axiosInstance.post(
-              "/users/create-user",
+              "/users",
               { ...newUser, password: hashedPassword }
             );
             onUserCreated(response.data);

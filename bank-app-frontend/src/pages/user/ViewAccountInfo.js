@@ -24,11 +24,11 @@ const ViewAccountInfo = () => {
           return;
         }
 
-        const accountResponse = await axiosInstance.get(`/accounts/user/${userId}`);
+        const accountResponse = await axiosInstance.get(`/accounts/users/${userId}`);
         if (accountResponse.data) {
           setAccountInfo(accountResponse.data);
           const accountId = accountResponse.data.id;
-          const balanceResponse = await axiosInstance.get(`/balances/account/${accountId}`);
+          const balanceResponse = await axiosInstance.get(`/balances/accounts/${accountId}`);
           setBalanceInfo(balanceResponse.data);
         } else {
           setError("Account not found for the current user.");
@@ -48,7 +48,7 @@ const ViewAccountInfo = () => {
         throw new Error("User ID not found.");
       }
 
-      await axiosInstance.put(`/users/update-password/${userId}`, null, {
+      await axiosInstance.put(`/users/${userId}/password`, null, {
         params: {
           oldPassword: oldPassword,
           newPassword: newPassword

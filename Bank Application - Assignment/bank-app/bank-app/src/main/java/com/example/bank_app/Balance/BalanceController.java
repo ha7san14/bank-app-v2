@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/balances")
+@RequestMapping("/api/v2/balances")
 public class BalanceController {
 
     private final BalanceService balanceService;
@@ -23,6 +24,7 @@ public class BalanceController {
     public BalanceController(BalanceService balanceService) {
         this.balanceService = Objects.requireNonNull(balanceService, "BalanceService must not be null");
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Balance>> getAllBalances() {
@@ -40,7 +42,7 @@ public class BalanceController {
         }
     }
 
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/accounts/{accountId}")
     public ResponseEntity<Balance> getBalanceByAccountId(@PathVariable Long accountId) {
         Balance balance = balanceService.getBalanceByAccountId(accountId);
         if (balance != null) {

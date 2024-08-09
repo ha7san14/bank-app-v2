@@ -18,7 +18,7 @@ const SendTransaction = () => {
         if (!userId) throw new Error("User ID not found.");
 
         const accountResponse = await axiosInstance.get(
-          `/accounts/user/${userId}`
+          `/accounts/users/${userId}`
         );
         if (!accountResponse.data)
           throw new Error("Account not found for the current user.");
@@ -26,7 +26,7 @@ const SendTransaction = () => {
         const accountId = accountResponse.data.id;
 
         const balanceResponse = await axiosInstance.get(
-          `/balances/account/${accountId}`
+          `/balances/accounts/${accountId}`
         );
         setCurrentBalance(balanceResponse.data.amount);
       } catch (err) {
@@ -96,7 +96,7 @@ const SendTransaction = () => {
       if (!userId) throw new Error("User ID not found.");
 
       const senderAccountResponse = await axiosInstance.get(
-        `/accounts/user/${userId}`
+        `/accounts/users/${userId}`
       );
       if (!senderAccountResponse.data)
         throw new Error("Sender account not found.");
@@ -105,7 +105,7 @@ const SendTransaction = () => {
       const senderAccountNumber = senderAccountResponse.data.accountNumber;
 
       const transactionResponse = await axiosInstance.post(
-        "/transactions/create-transaction",
+        "/transactions",
         {
           account: {
             id: senderAccountId,

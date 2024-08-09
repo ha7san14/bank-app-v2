@@ -33,7 +33,7 @@ const ManageTransactions = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axiosInstance.get("/users/get-all-users");
+      const response = await axiosInstance.get("/users");
       setUsers(response.data);
 
       const userMap = response.data.reduce((acc, user) => {
@@ -48,7 +48,7 @@ const ManageTransactions = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axiosInstance.get("/accounts/get-all-accounts");
+      const response = await axiosInstance.get("/accounts");
       setAccounts(response.data);
 
       const accountMap = response.data.reduce((acc, account) => {

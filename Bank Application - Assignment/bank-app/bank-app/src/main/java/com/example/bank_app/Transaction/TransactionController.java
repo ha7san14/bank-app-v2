@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/v2/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -48,13 +49,12 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/accounts/{accountId}")
     public ResponseEntity<List<Transaction>> getAllTransactionsByAccountId(@PathVariable Long accountId) {
         List<Transaction> transactions = transactionService.getAllTransactionsByAccountId(accountId);
         return ResponseEntity.ok(transactions);
     }
-
-    @PostMapping("/create-transaction")
+    @PostMapping
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
         try {
             Transaction createdTransaction = transactionService.saveTransaction(transaction);
