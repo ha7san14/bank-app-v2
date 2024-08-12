@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,12 +18,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int ACCOUNT_NUMBER_LENGTH = 10;
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
@@ -42,9 +46,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-//    public List<User> getAllUsersV2(int page, int size) {
+//    public Page<User> getAllUsers(int page, int size) {
 //        Pageable pageable = PageRequest.of(page, size);
-//        return userRepository.findAll(pageable).getContent();
+//        return userRepository.findAll(pageable);
 //    }
 
 
@@ -54,6 +58,19 @@ public class UserService {
 
     @Transactional
     public User saveUser(User user) {
+        if (!EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        User existingUserByUsername = userRepository.findByUsername(user.getUsername());
+        if (existingUserByUsername != null) {
+            throw new IllegalArgumentException("Username already in use");
+        }
+
+        User existingUserByEmail = userRepository.findByEmail(user.getEmail());
+        if (existingUserByEmail != null) {
+            throw new IllegalArgumentException("Email already in use");
+        }
         try {
             String password = user.getPassword();
             if (!password.startsWith("$2a$")) {
@@ -96,7 +113,13 @@ public class UserService {
         Optional<User> existingUser = userRepository.findById(id);
         if (existingUser.isPresent()) {
             User userToUpdate = existingUser.get();
-            userToUpdate.setUsername(user.getUsername());
+
+            if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
+                if (userRepository.findByUsername(user.getUsername()) != null) {
+                    throw new IllegalArgumentException("Username already in use");
+                }
+                userToUpdate.setUsername(user.getUsername());
+            }
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
                 if (user.getPassword().length() >= MIN_PASSWORD_LENGTH) {
                     userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -105,8 +128,18 @@ public class UserService {
                 }
             }
 
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setAddress(user.getAddress());
+            if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
+                if (!EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
+                    throw new IllegalArgumentException("Invalid email format");
+                }
+                if (userRepository.findByEmail(user.getEmail()) != null) {
+                    throw new IllegalArgumentException("Email already in use");
+                }
+                userToUpdate.setEmail(user.getEmail());
+            }
+            if (user.getAddress() != null) {
+                userToUpdate.setAddress(user.getAddress());
+            }
             return userRepository.save(userToUpdate);
         }
         return null;

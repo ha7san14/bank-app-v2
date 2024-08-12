@@ -3,6 +3,7 @@ package com.example.bank_app.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,21 +53,30 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
             LOGGER.info("Password in controller is " + user.getPassword());
             User createdUser = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Invalid email format")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
+            }
+            else if (errorMessage.contains("Username")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
+            } else if (errorMessage.contains("Email")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data provided");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
             User updatedUser = userService.updateUser(user, id);
             if (updatedUser != null) {
@@ -75,9 +85,20 @@ public class UserController {
                 return ResponseEntity.notFound().build();
             }
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            if (e.getMessage().contains("Username already in use")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
+            } else if (e.getMessage().contains("Email already in use")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
+            } else if (e.getMessage().contains("Invalid email format")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
+            } else if (e.getMessage().contains("Password must be at least")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid input data");
+            }
+        }  catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
