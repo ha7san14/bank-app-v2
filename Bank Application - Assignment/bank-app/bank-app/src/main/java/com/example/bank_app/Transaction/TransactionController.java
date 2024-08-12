@@ -35,6 +35,9 @@ public class TransactionController {
     @GetMapping("/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         List<Transaction> transactions = transactionService.getAllTransactions();
+        if (transactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(transactions);
     }
 
@@ -52,6 +55,9 @@ public class TransactionController {
     @GetMapping("/accounts/{accountId}/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactionsByAccountId(@PathVariable Long accountId) {
         List<Transaction> transactions = transactionService.getAllTransactionsByAccountId(accountId);
+        if (transactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(transactions);
     }
     @PostMapping("/transactions")

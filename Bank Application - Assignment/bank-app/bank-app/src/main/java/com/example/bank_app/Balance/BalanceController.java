@@ -29,6 +29,9 @@ public class BalanceController {
     @GetMapping("/balances")
     public ResponseEntity<List<Balance>> getAllBalances() {
         List<Balance> balances = balanceService.getAllBalances();
+        if (balances.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(balances);
     }
 
@@ -51,7 +54,7 @@ public class BalanceController {
             return ResponseEntity.notFound().build();
         }
     }
-//    @PostMapping("/create-balance")
+//    @PostMapping("/balances")
 //    public ResponseEntity<Balance> createBalance(@RequestBody Balance balance) {
 //        Balance createdBalance = balanceService.saveBalance(balance);
 //        return ResponseEntity.status(HttpStatus.CREATED).body(createdBalance);

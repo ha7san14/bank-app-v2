@@ -34,6 +34,9 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(users);
     }
 
@@ -50,19 +53,31 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        LOGGER.info("Password in controller is " + user.getPassword());
-        User createdUser = userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        try {
+            LOGGER.info("Password in controller is " + user.getPassword());
+            User createdUser = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(user, id);
-        if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            User updatedUser = userService.updateUser(user, id);
+            if (updatedUser != null) {
+                return ResponseEntity.ok(updatedUser);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
