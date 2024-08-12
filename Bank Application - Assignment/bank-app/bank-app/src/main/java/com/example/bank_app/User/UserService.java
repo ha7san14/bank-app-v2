@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,14 +43,14 @@ public class UserService {
         this.balanceRepository = balanceRepository;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-//    public Page<User> getAllUsers(int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return userRepository.findAll(pageable);
+//    public List<User> getAllUsers() {
+//        return userRepository.findAll();
 //    }
+
+    public Page<User> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
+    }
 
 
     public User getUserById(Long id) {
@@ -59,17 +60,17 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         if (!EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
-            throw new IllegalArgumentException("Invalid email format");
+            throw new DataIntegrityViolationException("Invalid email format");
         }
 
         User existingUserByUsername = userRepository.findByUsername(user.getUsername());
         if (existingUserByUsername != null) {
-            throw new IllegalArgumentException("Username already in use");
+            throw new DataIntegrityViolationException("Username already in use");
         }
 
         User existingUserByEmail = userRepository.findByEmail(user.getEmail());
         if (existingUserByEmail != null) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new DataIntegrityViolationException("Email already in use");
         }
         try {
             String password = user.getPassword();
@@ -116,7 +117,7 @@ public class UserService {
 
             if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
                 if (userRepository.findByUsername(user.getUsername()) != null) {
-                    throw new IllegalArgumentException("Username already in use");
+                    throw new DataIntegrityViolationException("Username already in use");
                 }
                 userToUpdate.setUsername(user.getUsername());
             }
@@ -124,16 +125,16 @@ public class UserService {
                 if (user.getPassword().length() >= MIN_PASSWORD_LENGTH) {
                     userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
                 } else {
-                    throw new IllegalArgumentException("Password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
+                    throw new DataIntegrityViolationException("Password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
                 }
             }
 
             if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
                 if (!EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
-                    throw new IllegalArgumentException("Invalid email format");
+                    throw new DataIntegrityViolationException("Invalid email format");
                 }
                 if (userRepository.findByEmail(user.getEmail()) != null) {
-                    throw new IllegalArgumentException("Email already in use");
+                    throw new DataIntegrityViolationException("Email already in use");
                 }
                 userToUpdate.setEmail(user.getEmail());
             }

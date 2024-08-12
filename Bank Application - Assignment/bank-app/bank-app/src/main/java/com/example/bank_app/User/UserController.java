@@ -3,6 +3,7 @@ package com.example.bank_app.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,9 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<Page<User>> getAllUsers( @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size) {
+        Page<User> users = userService.getAllUsers(page, size);
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -58,19 +60,12 @@ public class UserController {
             LOGGER.info("Password in controller is " + user.getPassword());
             User createdUser = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            String errorMessage = e.getMessage();
-            if (errorMessage.contains("Invalid email format")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
-            }
-            else if (errorMessage.contains("Username")) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
-            } else if (errorMessage.contains("Email")) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data provided");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -84,19 +79,11 @@ public class UserController {
             } else {
                 return ResponseEntity.notFound().build();
             }
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            if (e.getMessage().contains("Username already in use")) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
-            } else if (e.getMessage().contains("Email already in use")) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
-            } else if (e.getMessage().contains("Invalid email format")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
-            } else if (e.getMessage().contains("Password must be at least")) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid input data");
-            }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Unexpected error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
