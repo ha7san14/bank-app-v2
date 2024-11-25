@@ -45,22 +45,31 @@ https://github.com/user-attachments/assets/bb0e205e-fec3-4a8e-9df2-4b4e2affdc2a
 
 ## Screenshots
 
-|  Customer Signup                              |  Customer Login                               |
+|  Admin and Customer Login                              |  Admin Dashbboard                               |
 |-----------------------------------------|-----------------------------------------|
-| ![User_Signup](https://github.com/user-attachments/assets/5e4c2dd0-1cbc-464a-92dc-ec7fe0e9216f) | ![User_Login](https://github.com/user-attachments/assets/b929779f-993d-402f-87bd-855a0652aa65) |
+| ![Admin Customer_Login](https://github.com/user-attachments/assets/d26609d4-b580-46c3-8b83-6bd0a31f30e5)| ![Admin_Dashboard](https://github.com/user-attachments/assets/607c92a8-63c4-40b3-a10f-87fd30dc1a60) |
 
-|  Customer Dashboard                              |  Customer Fund Transfer                               |
+|  Admin Create New User Account                            |  Admin Edit User Account                               |
 |-----------------------------------------|-----------------------------------------|
-| ![User_Dashboard](https://github.com/user-attachments/assets/60fc8b83-47e6-4fad-9d86-241fd1e7535d) | ![User_FundTransfer](https://github.com/user-attachments/assets/5b05ee17-a1fe-456b-84de-ddbb714dfa3e) |
+| ![Admin_Create](https://github.com/user-attachments/assets/b3feec84-6efd-4d9b-af8e-d1d06e94254b) | ![Admin_Edit_User_Profile](https://github.com/user-attachments/assets/13ad22aa-0445-459a-b0c2-1da2930b7a23) |
 
-|  Customer Transactions History                              |  Customer Profile                               |
+|  Admin Delete User Account                              |  Admin Manage User Balance                              |
 |-----------------------------------------|-----------------------------------------|
-| ![User_Transactions](https://github.com/user-attachments/assets/31d4bf5b-81a5-4761-8925-073f5c2e1a7e) | ![User_Profile](https://github.com/user-attachments/assets/59a7d03a-9651-4965-bf83-82d610d0fec4) |
+| ![Admin_Delete](https://github.com/user-attachments/assets/71368844-fcd7-4289-bc0a-f68cf401afe9) | ![Admin_Manage_User_Balance](https://github.com/user-attachments/assets/b5511167-1c9f-43a4-8067-1f28ae8e6abc) |
 
-|  Admin Login                              |  Admin Dashbboard                               |
+|  Admin Edit User Balance                               |  Admin Manage Transactions                              |
 |-----------------------------------------|-----------------------------------------|
-| ![Admin_Login](https://github.com/user-attachments/assets/36a36913-4d36-490f-8ac5-a832efcdbc1b) | ![Admin_Dashboard](https://github.com/user-attachments/assets/59389e47-4165-48c7-a0bc-1b7aaaad65f8) |
+| ![Admin_Edit_User_Balance](https://github.com/user-attachments/assets/a1fd1561-1435-49e2-95ac-3c2caf461f58) | ![Admin_Manage_Transactions](https://github.com/user-attachments/assets/27766b75-3220-4c57-96ac-520a696c92ae) |
 
-|  Admin Search                              |  Admin Edit Customer Profile                               |
+|  Filter Date Feature                              |  User Profile                              |
 |-----------------------------------------|-----------------------------------------|
-| ![Admin_Search](https://github.com/user-attachments/assets/b5a64c59-7c1b-45f3-b974-8aa7b0384139) | ![Admin_Edit_User_Profile](https://github.com/user-attachments/assets/495999d2-6742-44b0-bf58-69e3e210bb04) |
+| ![Filter_Date](https://github.com/user-attachments/assets/8a377a81-9a15-45ea-a17d-a6cfee76bdd8) | ![User_Profile](https://github.com/user-attachments/assets/013d5f24-8aff-4b77-9608-a7754f85b9d3) |
+
+|  User Change Password                             |  User Transactions History                                |
+|-----------------------------------------|-----------------------------------------|
+| ![User_Change_Password ](https://github.com/user-attachments/assets/911302ad-8056-43e7-8f1e-95578953168a) | ![User_Transaction](https://github.com/user-attachments/assets/752a31c0-6247-45bb-acc8-80495caaf50a) |
+
+|  User Funds Transfer                             |                       
+|-----------------------------------------|
+| ![User_Funds_Transfer](https://github.com/user-attachments/assets/d483bddc-f918-406e-9f1a-4e1ef1e341f6) |
+
